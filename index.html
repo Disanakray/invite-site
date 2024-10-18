@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пойдешь со мной гулять?</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f8ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+        }
+        h1 {
+            color: #ff69b4;
+        }
+        .cat-container {
+            position: relative;
+        }
+        .cat-img {
+            width: 300px;
+            height: auto;
+        }
+        .button {
+            background-color: #ff69b4;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.2em;
+            margin: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        .button:hover {
+            background-color: #ff1493;
+        }
+        #no {
+            position: absolute;
+            z-index: 10;
+            left: 350px; /* Начальное расстояние слева */
+            top: 515px;  /* Начальное расстояние сверху */
+        }
+        #hint {
+            display: none; /* Изначально скрываем текст */
+            color: #ff69b4;
+            font-size: 1.8em;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Пойдешь со мной гулять?</h1>
+
+<div class="cat-container">
+    <!-- Гиф с котиком -->
+    <img id="cat-img" class="cat-img" src="https://media.giphy.com/media/YoEarwgMhmZlSiCnqL/giphy.gif" alt="Милый зайчик">
+</div>
+
+<!-- Кнопки -->
+<button id="yes" class="button">Да</button>
+<button id="no" class="button">Нет</button>
+
+<!-- Подсказка "Нажми ты уже да!" -->
+<p id="hint">Не пытайся просто нажми ДА!</p>
+
+<script>
+    const noButton = document.getElementById('no');
+    const catImg = document.getElementById('cat-img');
+    const hintText = document.getElementById('hint');
+    let startTime = null;
+    let gifChanged = false; // Флаг для проверки, сменился ли GIF
+
+    // Функция для перемещения кнопки "Нет"
+    noButton.addEventListener('mouseover', function() {
+        if (!startTime) {
+            startTime = new Date().getTime(); // Запоминаем время, когда начались попытки
+        }
+
+        const x = Math.random() * (window.innerWidth - noButton.clientWidth);
+        const y = Math.random() * (window.innerHeight - noButton.clientHeight);
+        noButton.style.left = x + 'px';
+        noButton.style.top = y + 'px';
+
+        const currentTime = new Date().getTime();
+        const timeElapsed = (currentTime - startTime) / 1000; // Время в секундах
+
+        // Если прошло более 5 секунд и GIF не сменился, меняем его
+        if (timeElapsed > 3 && !gifChanged) {
+            catImg.src = "https://media.giphy.com/media/lQCz6gRXfB6az15DUM/giphy.gif"; // Новый GIF
+            gifChanged = true; // Устанавливаем флаг, чтобы не менять GIF снова
+
+            // Показываем текст "Нажми ты уже да!" через 5 секунд
+            hintText.style.display = 'block';
+        }
+    });
+
+    // Кнопка "Да" перенаправляет на другую страницу
+    const yesButton = document.getElementById('yes');
+    yesButton.addEventListener('click', function() {
+        window.location.href = 'success.html';
+    });
+</script>
+
+</body>
+</html>
